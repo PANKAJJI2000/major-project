@@ -27,11 +27,11 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-          <a class="nav-link" href="/listings">Explore</a>
+          <a class="nav-link" href="/listings">Airbnb</a>
         </div>
         <div class="navbar-nav ms-auto">
-          <form class="d-flex" role="search">
-            <input class="form-control me-2 search-inp" type="search" placeholder="Search destinations" aria-label="Search">
+          <form class="d-flex" role="search" method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
+            <input class="form-control me-2 search-inp" type="search" name="listing[description]" placeholder="Search destinations" aria-label="Search">
             <button class="btn search-btn" type="submit">
               <i class="fa-solid fa-magnifying-glass"></i>Search</button>
           </form>
