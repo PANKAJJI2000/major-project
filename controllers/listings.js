@@ -3,10 +3,10 @@ const Listing = require("../models/listing");
 module.exports.index = async (req, res) => {
     try {
         const { search } = req.query;
-        let listings;
+        let allListings;  // Changed back to allListings
         
         if (search) {
-            listings = await Listing.find({
+            allListings = await Listing.find({
                 $or: [
                     { title: { $regex: search, $options: "i" } },
                     { location: { $regex: search, $options: "i" } },
@@ -14,10 +14,10 @@ module.exports.index = async (req, res) => {
                 ]
             });
         } else {
-            listings = await Listing.find({});
+            allListings = await Listing.find({});
         }
         
-        res.render("listings/index.ejs", { listings }); // Changed from allListings to listings
+        res.render("listings/index.ejs", { allListings }); // Changed to allListings
     } catch (error) {
         console.error(error);
         req.flash("error", "Error loading listings");
@@ -25,7 +25,7 @@ module.exports.index = async (req, res) => {
     }
 };
 
-module.exports.renderNewForm = (req,res) =>{
+ module.exports.renderNewForm = (req,res) =>{
     res.render("listings/new.ejs");
   };
   module.exports.showListing = async (req,res) =>{
