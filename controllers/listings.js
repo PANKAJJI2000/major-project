@@ -17,7 +17,10 @@ module.exports.index = async (req, res) => {
             allListings = await Listing.find({});
         }
         
-        res.render("listings/index.ejs", { allListings });
+        res.render("listings/index.ejs", { 
+            allListings,
+            currUser: req.user  // Add current user to the view
+        });
     } catch (error) {
         console.error(error);
         req.flash("error", "Error loading listings");
