@@ -3,23 +3,18 @@ const Listing = require("../models/listing");
 module.exports.index = async (req, res) => {
     try {
         const { search } = req.query;
-        let allListings;
-        
-        if (search) {
-            allListings = await Listing.find({
+        let allListings = await Listing.find(
+            search ? {
                 $or: [
                     { title: { $regex: search, $options: "i" } },
                     { location: { $regex: search, $options: "i" } },
                     { country: { $regex: search, $options: "i" } }
                 ]
-            });
-        } else {
-            allListings = await Listing.find({});
-        }
-        
+            } : {}
+        );
         res.render("listings/index.ejs", { 
             allListings,
-            currUser: req.user  // Add current user to the view
+            currUser: req.user 
         });
     } catch (error) {
         console.error(error);
@@ -44,7 +39,10 @@ module.exports.index = async (req, res) => {
      req.flash("success", "Listing you requested for does not exist");
      res.redirect("/listings")
     }
-    res.render("listings/show.ejs", {listing});
+    res.render("listings/show.ejs", { 
+        listing,
+        currUser: req.user 
+    });
 };
 module.exports.createListing= async (req, res, next) => {
     let url= req.file.path;

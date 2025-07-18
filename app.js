@@ -54,22 +54,17 @@ store.on("error", () =>{
   console.log("ERROR in  MONGO SESSION STORE", err);
 });
 
-const sessionOptions ={
+const sessionOptions = {
   store,
   secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
-  cookieL: {
-    expires: Date.now()+ 7*24*60*60*1000,
-    maxAge: 7*24*60*60*1000,
+  cookie: {  // Fixed typo from cookieL to cookie
+    expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
   },
 };
-
-// app.get("/",(req,res) =>{
-//   res.send("Hi, I am root");
-// });
-
 
 app.use(session(sessionOptions));
 app.use(flash());
@@ -81,8 +76,9 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// Move this middleware before routes
 app.use((req, res, next) => {
-  res.locals.currUser = req.user;  // Ensure this middleware runs for all routes
+  res.locals.currUser = req.user;
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   next();
