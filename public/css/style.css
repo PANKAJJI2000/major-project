@@ -93,3 +93,13 @@ img {
 .btns{
     display: flex;  
 }
+.listings-container {
+    margin: 0 5rem;
+    padding: 2rem 0;
+}
+
+@media (max-width: 768px) {
+    .listings-container {
+        margin: 0 1rem;
+    }
+}
