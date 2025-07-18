@@ -3,7 +3,7 @@ const Listing = require("../models/listing");
 module.exports.index = async (req, res) => {
     try {
         const { search } = req.query;
-        let allListings;  // Changed back to allListings
+        let allListings;
         
         if (search) {
             allListings = await Listing.find({
@@ -17,7 +17,7 @@ module.exports.index = async (req, res) => {
             allListings = await Listing.find({});
         }
         
-        res.render("listings/index.ejs", { allListings }); // Changed to allListings
+        res.render("listings/index.ejs", { allListings });
     } catch (error) {
         console.error(error);
         req.flash("error", "Error loading listings");
