@@ -14,7 +14,7 @@
             </div>
           </div>
 
-          <% if(currUser && currUser._id.equals(listing.owner._id)) { %>
+          <% if (typeof currUser !== 'undefined' && currUser && currUser._id && listing && listing.owner && listing.owner._id && String(currUser._id) === String(listing.owner._id)) { %>
       <div class="btns offset-1 mb-10">
         <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark col-1 offset-2 edit-btn">Edit</a>        
         <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
@@ -24,7 +24,7 @@
       <% } %>
 
     <div class="col-8 offset-3">
-      <% if(currUser) { %>
+      <% if (typeof currUser !== 'undefined' && currUser) { %>
         <hr />
       <h4>Leave a Review</h4>
       <form action="/listings/<%= listing.id %>/reviews" method="POST" novalidate class="needs-validation mb-3">
