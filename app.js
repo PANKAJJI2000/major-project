@@ -21,7 +21,7 @@ const reviewRouter= require("./routes/review.js");
 const userRouter= require("./routes/user.js");
 
 const dbUrl= process.env.ATLASDB_URL;
-
+  
 main()
 .then(() =>{
     console.log("connected to DB"); 
@@ -84,6 +84,10 @@ app.use((req, res, next) => {
   next();
 });
 
+// Root route - redirect to listings
+app.get("/", (req, res) => {
+  res.redirect("/listings");
+});
 
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
@@ -101,6 +105,8 @@ app.use((err,req,res,next) =>{
   res.status(statusCode).render("error.ejs", {message});
 });
 
-app.listen(8080, () => {
-    console.log("server is listening to port 8080");
+// Use environment variable PORT or fallback to 8080
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+    console.log(`Server is listening on port ${port}`);
   });
