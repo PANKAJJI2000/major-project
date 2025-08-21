@@ -10,7 +10,7 @@
               <p class="card-text"> <%= listing.description %></p>
               <p class="card-text"> &#8377;<%= listing.price.toLocaleString("en-IN") %></p>
               <p class="card-text"> <%= listing.location %></p>
-              <p class="card-text"></p> <%= listing.country %> </p>
+              <p class="card-text"><%= listing.country %></p>
             </div>
           </div>
 
@@ -71,21 +71,49 @@
       </div>
       <% } %>
     </div>
+    
+    <% if(typeof process.env.MAP_TOKEN !== 'undefined' && process.env.MAP_TOKEN) { %>
     <div class="col-6 offset-3 mb-3">
       <h3>Where You'll be</h3>
       <div id="map"></div>
-  </div>
+    </div>
+    <% } else { %>
+    <div class="col-6 offset-3 mb-3">
+      <h3>Location</h3>
+      <p><%= listing.location %>, <%= listing.country %></p>
+    </div>
+    <% } %>
 </div>
-<script>
-  let mapToken= "<%= process.env.MAP_TOKEN %>";
-  console.log(mapToken);
-  mapboxgl.accessToken = mapToken;
 
-  var map = tt.map({
-      key: 'J6l3hmNjTbKUWpxY7OKedESju8gThLT4',
-      container: 'map',
-      dragPan: !isMobileOrTablet()
-  });
-  map.addControl(new tt.FullscreenControl());
-  map.addControl(new tt.NavigationControl());
+<% if(typeof process.env.MAP_TOKEN !== 'undefined' && process.env.MAP_TOKEN) { %>
+<script>
+  try {
+    let mapToken = "<%= process.env.MAP_TOKEN %>";
+    if (mapToken && mapToken !== "undefined") {
+      mapboxgl.accessToken = mapToken;
+
+      // Check if TomTom is available
+      if (typeof tt !== 'undefined') {
+        var map = tt.map({
+            key: 'J6l3hmNjTbKUWpxY7OKedESju8gThLT4',
+            container: 'map',
+            dragPan: !isMobileOrTablet()
+        });
+        map.addControl(new tt.FullscreenControl());
+        map.addControl(new tt.NavigationControl());
+      } else {
+        document.getElementById('map').innerHTML = '<p>Map functionality is currently unavailable.</p>';
+      }
+    }
+  } catch (error) {
+    console.error('Map initialization error:', error);
+    if (document.getElementById('map')) {
+      document.getElementById('map').innerHTML = '<p>Map functionality is currently unavailable.</p>';
+    }
+  }
+
+  function isMobileOrTablet() {
+    return window.innerWidth <= 768;
+  }
 </script>
+<% } %>
